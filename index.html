@@ -1,203 +1,210 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>As florzinhas pro meu amor</title>
+    <title>Cuzinho hj?</title>
     <style>
-        :root {
-            /* Cores do Pôr do Sol */
-            --sunset-top: #2c3e50;
-            --sunset-mid: #e67e22;
-            --sunset-low: #f1c40f;
-            --grass: #1b5e20;
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@400;600&display=swap');
+
+        * {
+            box-sizing: border-box;
         }
 
         body {
             margin: 0;
+            padding: 0;
+            min-height: 100vh;
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
-            min-height: 100vh;
-            background-color: #222;
-            font-family: 'Segoe UI', sans-serif;
-            color: white;
-        }
-
-        /* Container do Jardim com Pôr do Sol */
-        #garden {
-            position: relative;
-            width: 90vw;
-            max-width: 900px;
-            height: 500px;
-            background: linear-gradient(to bottom, 
-                var(--sunset-top) 0%, 
-                #d35400 30%, 
-                var(--sunset-mid) 60%, 
-                var(--sunset-low) 75%, 
-                var(--grass) 75%, 
-                #0a2f0c 100%);
-            border-radius: 20px;
-            border: 8px solid #333;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            /* Fundo degradê vermelho e preto simulando movimento de ondas */
+            background: linear-gradient(45deg, #050000, #1a0003, #4a0007, #1a0003, #050000);
+            background-size: 400% 400%;
+            animation: waveGradient 12s ease infinite;
             overflow: hidden;
+            font-family: 'Poppins', sans-serif;
         }
 
-        /* Sol se pondo */
-        .sun {
-            position: absolute;
-            bottom: 20%;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 120px;
-            height: 120px;
-            background: radial-gradient(circle, #fff7e6 0%, #f1c40f 70%, transparent 100%);
-            border-radius: 50%;
-            filter: blur(5px);
-            opacity: 0.8;
+        /* Animação do fundo em ondas */
+        @keyframes waveGradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
-        /* Estilo das Flores */
-        .flower-container {
-            position: absolute;
-            bottom: 25%; /* Alinhado com a linha do horizonte/grama */
+        .container {
+            text-align: center;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 40px 60px;
+            border-radius: 20px;
+            backdrop-filter: blur(8px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7);
+            border: 1px solid rgba(255, 77, 109, 0.1);
+            z-index: 10;
+        }
+
+        /* Título romântico e pulsante */
+        .title {
+            font-family: 'Dancing Script', cursive;
+            font-size: 3.5rem;
+            color: #ff4d6d;
+            margin: 0 0 40px 0;
+            text-shadow: 0 0 10px rgba(255, 77, 109, 0.5), 0 0 20px rgba(255, 77, 109, 0.3);
+            animation: pulseText 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes pulseText {
+            0% { transform: scale(1); text-shadow: 0 0 10px rgba(255, 77, 109, 0.5); }
+            100% { transform: scale(1.03); text-shadow: 0 0 25px rgba(255, 77, 109, 0.8), 0 0 10px #ff0000; }
+        }
+
+        .btn-group {
             display: flex;
-            flex-direction: column;
-            align-items: center;
-            transform-origin: bottom center;
-            animation: sway 4s ease-in-out infinite alternate;
-        }
-
-        .flower-head {
-            line-height: 1;
-            filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.2));
-            user-select: none;
-        }
-
-        .stem {
-            width: 4px;
-            background: linear-gradient(to bottom, #2d5a27, #0a1f0a);
-            border-radius: 2px;
-            margin-top: -5px;
-        }
-
-        /* Animação de Balanço */
-        @keyframes sway {
-            0% { transform: rotate(-3deg) translateX(-2px); }
-            100% { transform: rotate(3deg) translateX(2px); }
-        }
-
-        /* Painel de Controle */
-        .controls {
-            margin-top: 25px;
-            background: rgba(255, 255, 255, 0.1);
-            padding: 20px;
-            border-radius: 50px;
-            backdrop-filter: blur(10px);
-            display: flex;
-            gap: 15px;
+            justify-content: center;
+            gap: 30px;
+            min-height: 60px;
             align-items: center;
         }
 
-        .counter {
-            font-weight: bold;
-            font-size: 1.2rem;
-            margin-right: 10px;
-            min-width: 100px;
-        }
-
-        button {
-            padding: 12px 25px;
-            font-size: 16px;
-            font-weight: bold;
+        /* Estilização dos Botões com volume 3D */
+        .btn {
+            padding: 15px 35px;
+            font-size: 18px;
+            font-weight: 600;
             border: none;
-            border-radius: 30px;
+            border-radius: 50px;
             cursor: pointer;
-            transition: 0.3s;
+            transition: all 0.2s ease;
+            font-family: 'Poppins', sans-serif;
         }
 
-        .btn-add { background: #e67e22; color: white; }
-        .btn-add:hover { background: #d35400; transform: scale(1.05); }
+        /* Botão SIM - Tons de Rosa/Vermelho Romântico */
+        #sim {
+            background: linear-gradient(135deg, #ff4d6d, #ff758f);
+            color: #fff;
+            /* Sombras que dão ideia de volume (3D) */
+            box-shadow: 0 6px 0 #b7094c, 0 10px 20px rgba(0, 0, 0, 0.5);
+        }
 
-        .btn-clear { background: #555; color: #ccc; }
-        .btn-clear:hover { background: #333; }
+        #sim:hover {
+            background: linear-gradient(135deg, #ff758f, #ff8fa3);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 0 #b7094c, 0 12px 24px rgba(0, 0, 0, 0.6);
+        }
+
+        /* Efeito de clique físico (afundar) */
+        #sim:active {
+            transform: translateY(6px);
+            box-shadow: 0 0px 0 #b7094c, 0 4px 10px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Botão NÃO - Tom sóbrio que vai fugir */
+        #nao {
+            background: linear-gradient(135deg, #4a4e69, #9a8c98);
+            color: #fff;
+            box-shadow: 0 6px 0 #22223b, 0 10px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Corações flutuantes */
+        .heart {
+            position: absolute;
+            color: #ff4d6d;
+            pointer-events: none;
+            font-size: 20px;
+            filter: drop-shadow(0 0 5px rgba(255,77,109,0.5));
+            animation: floatUp 5s linear forwards;
+            opacity: 0;
+            z-index: 1;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(105vh) scale(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.7;
+            }
+            90% {
+                opacity: 0.7;
+            }
+            100% {
+                transform: translateY(-10vh) scale(1.5) rotate(360deg);
+                opacity: 0;
+            }
+        }
     </style>
 </head>
 <body>
 
-    <div id="garden">
-        <div class="sun"></div>
+    <div class="container">
+        <h1 class="title">Cuzinho hoje? 🌹</h1>
+        <div class="btn-group">
+            <button id="sim" class="btn">Sim, com certeza!</button>
+            <button id="nao" class="btn">Não</button>
         </div>
-
-    <div class="controls">
-        <div class="counter">Flores: <span id="count">0</span></div>
-        <button class="btn-add" onclick="addFlower()">✨ PLANTAR FLOR</button>
-        <button class="btn-clear" onclick="clearGarden()">RECOMEÇAR</button>
     </div>
 
     <script>
-        const garden = document.getElementById('garden');
-        const countDisplay = document.getElementById('count');
-        let flowerCount = 0;
+        const simBtn = document.getElementById('sim');
+        const naoBtn = document.getElementById('nao');
 
-        // Lista de flores possíveis
-        const flowerTypes = ['🌹', '🌷', '🌻', '🌸', '🌼', '🌺'];
+        // Redirecionamento do botão SIM
+        simBtn.addEventListener('click', () => {
+            window.location.href = 'https://www.youtube.com/watch?v=izGwDsrQ1eQ';
+        });
 
-        function addFlower() {
-            flowerCount++;
-            countDisplay.innerText = flowerCount;
-
-            const container = document.createElement('div');
-            container.className = 'flower-container';
-
-            // Randomização
-            const randomFlower = flowerTypes[Math.floor(Math.random() * flowerTypes.length)];
-            const posX = Math.random() * 94 + 3; // 3% a 97%
-            const stemHeight = Math.floor(Math.random() * 100) + 30; // 30px a 130px
-            const size = Math.floor(Math.random() * 25) + 25; // 25px a 50px
-            const swayDuration = (Math.random() * 2 + 3).toFixed(2); // 3s a 5s
-
-            // Configuração do container
-            container.style.left = `${posX}%`;
-            container.style.animationDuration = `${swayDuration}s`;
-            container.style.zIndex = 200 - stemHeight; // Perspectiva
-
-            // Cabeça da flor
-            const head = document.createElement('div');
-            head.className = 'flower-head';
-            head.innerHTML = randomFlower;
-            head.style.fontSize = `${size}px`;
-
-            // Caule
-            const stem = document.createElement('div');
-            stem.className = 'stem';
-            stem.style.height = `${stemHeight}px`;
-
-            // Montagem e Animação de Entrada
-            container.appendChild(head);
-            container.appendChild(stem);
-            garden.appendChild(container);
-
-            container.style.opacity = '0';
-            container.style.transform = 'scale(0)';
+        // Função para mover o botão NÃO de forma inteligente na tela toda
+        function desviar() {
+            // Garante que o botão use posição absoluta para voar pela tela livremente
+            naoBtn.style.position = 'absolute';
             
+            // Define limites para o botão não sumir completamente da barra de rolagem
+            const maxX = window.innerWidth - naoBtn.offsetWidth - 20;
+            const maxY = window.innerHeight - naoBtn.offsetHeight - 20;
+
+            const randomX = Math.max(10, Math.floor(Math.random() * maxX));
+            const randomY = Math.max(10, Math.floor(Math.random() * maxY));
+
+            naoBtn.style.left = randomX + 'px';
+            naoBtn.style.top = randomY + 'px';
+        }
+
+        // Faz o botão fugir tanto ao passar o mouse (computador) quanto ao tocar (celular)
+        naoBtn.addEventListener('mouseover', desviar);
+        naoBtn.addEventListener('click', desviar);
+
+        // Sistema para gerar corações aleatórios no fundo
+        function criarCoracao() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            
+            // Alterna o estilo do emoji de coração para dar variedade
+            const modelos = ['❤️', '💖', '💘', '💕', '🌹'];
+            heart.innerHTML = modelos[Math.floor(Math.random() * modelos.length)];
+            
+            // Posição horizontal aleatória
+            heart.style.left = Math.random() * 100 + 'vw';
+            
+            // Tamanho aleatório
+            const tamanho = Math.random() * 20 + 10; // entre 10px e 30px
+            heart.style.fontSize = tamanho + 'px';
+            
+            // Velocidade da animação aleatória para parecer natural
+            const duracao = Math.random() * 3 + 4; // entre 4s e 7s
+            heart.style.animationDuration = duracao + 's';
+            
+            document.body.appendChild(heart);
+
+            // Remove o coração após a animação acabar para não travar a página
             setTimeout(() => {
-                container.style.transition = 'all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
-                container.style.opacity = '1';
-                container.style.transform = 'scale(1)';
-            }, 10);
+                heart.remove();
+            }, duracao * 1000);
         }
 
-        function clearGarden() {
-            garden.querySelectorAll('.flower-container').forEach(f => f.remove());
-            flowerCount = 0;
-            countDisplay.innerText = flowerCount;
-            addFlower(); // Recomeça com uma
-        }
-
-        // Inicia com a primeira flor
-        window.onload = addFlower;
+        // Cria um novo coração a cada 350 milissegundos
+        setInterval(criarCoracao, 350);
     </script>
 </body>
 </html>
