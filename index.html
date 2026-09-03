@@ -1,210 +1,598 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cuzinho hj?</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@400;600&display=swap');
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inventário de Ar-Condicionado 2026</title>
+<style>
+    :root {
+        --bg: #f3f4f7;
+        --surface: #ffffff;
+        --surface-2: #faf7f8;
+        --text: #241820;
+        --muted: #756771;
+        --primary: #7b1735;
+        --primary-dark: #5b1027;
+        --border: #e3d9dd;
+        --success: #147a46;
+        --warning: #a96800;
+        --danger: #a52d2d;
+        --shadow: 0 12px 30px rgba(50, 20, 32, .12);
+        --shadow-hover: 0 18px 38px rgba(50, 20, 32, .18);
+        --radius: 16px;
+    }
 
-        * {
-            box-sizing: border-box;
+    * { box-sizing: border-box; }
+    body {
+        margin: 0;
+        font-family: Arial, Helvetica, sans-serif;
+        color: var(--text);
+        background: radial-gradient(circle at top left, rgba(123,23,53,.06), transparent 32%), var(--bg);
+    }
+
+    header {
+        background: linear-gradient(135deg, #4d0d23 0%, #741631 52%, #8f2042 100%);
+        color: white;
+        padding: 30px 20px;
+    }
+    .container {
+        width: min(1280px, calc(100% - 32px));
+        margin: 0 auto;
+    }
+    header h1 {
+        margin: 0 0 8px;
+        font-size: clamp(1.55rem, 3vw, 2.35rem);
+    }
+    header p {
+        margin: 0;
+        opacity: .9;
+        line-height: 1.5;
+    }
+
+    main { padding: 24px 0 44px; }
+
+    .filter-panel {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        box-shadow: 0 12px 30px rgba(50, 20, 32, .10), 0 2px 6px rgba(50,20,32,.04);
+        padding: 18px;
+        margin-bottom: 20px;
+    }
+    .filters {
+        display: grid;
+        grid-template-columns: minmax(220px, 1.2fr) minmax(220px, 1fr) minmax(180px, .7fr);
+        gap: 14px;
+        align-items: end;
+    }
+    label {
+        display: block;
+        font-weight: 700;
+        font-size: .9rem;
+        margin-bottom: 7px;
+    }
+    select, input {
+        width: 100%;
+        min-height: 44px;
+        border: 1px solid var(--border);
+        border-radius: 11px;
+        box-shadow: inset 0 1px 2px rgba(0,0,0,.04);
+        padding: 10px 12px;
+        background: var(--surface);
+        color: var(--text);
+        font-size: .95rem;
+        outline: none;
+    }
+    select:focus, input:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(11,94,168,.12);
+    }
+    .btn {
+        min-height: 44px;
+        border: 0;
+        border-radius: 9px;
+        padding: 10px 16px;
+        font-weight: 700;
+        cursor: pointer;
+        background: #e8eef6;
+        color: #243349;
+    }
+    .btn:hover { background: #dae5f1; }
+
+    .summary {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 12px;
+        margin-bottom: 20px;
+    }
+    .card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 15px 16px;
+        box-shadow: 0 7px 18px rgba(50, 20, 32, .09), 0 2px 5px rgba(50, 20, 32, .04);
+        transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease;
+    }
+    .card:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-hover);
+        border-color: rgba(123,23,53,.22);
+    }
+
+    .card .label {
+        color: var(--muted);
+        font-size: .8rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: .03em;
+        margin-bottom: 7px;
+    }
+    .card .value {
+        font-size: 1.65rem;
+        font-weight: 800;
+    }
+    .success .value { color: var(--success); }
+    .warning .value { color: var(--warning); }
+    .danger .value { color: var(--danger); }
+
+    .table-panel {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        overflow: hidden;
+        box-shadow: var(--shadow);
+    }
+    .table-head {
+        padding: 17px 18px;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 15px;
+    }
+    .table-head h2 {
+        margin: 0;
+        font-size: 1.08rem;
+    }
+    .result-count {
+        color: var(--muted);
+        font-size: .88rem;
+        white-space: nowrap;
+    }
+    .table-wrap {
+        overflow-x: auto;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 1040px;
+    }
+    th {
+        background: linear-gradient(180deg, #f8eef1, #f2e4e8);
+        color: #572136;
+        font-size: .78rem;
+        text-transform: uppercase;
+        letter-spacing: .03em;
+        text-align: left;
+        padding: 11px 12px;
+        border-bottom: 1px solid var(--border);
+        position: sticky;
+        top: 0;
+    }
+    td {
+        padding: 11px 12px;
+        border-bottom: 1px solid #edf1f5;
+        vertical-align: top;
+        font-size: .88rem;
+        line-height: 1.35;
+    }
+    tbody tr { transition: background .18s ease; }
+    tbody tr:hover { background: #fbf0f3; }
+    tbody tr:last-child td { border-bottom: 0; }
+
+    .status {
+        display: inline-block;
+        border-radius: 999px;
+        padding: 4px 9px;
+        font-weight: 700;
+        font-size: .74rem;
+        white-space: nowrap;
+        background: #edf1f5;
+    }
+    .status-ok { background: #e5f5ec; color: #11683c; }
+    .status-maint { background: #fff2d8; color: #8b5700; }
+    .status-old { background: #f9e5e5; color: #8e2828; }
+
+    .patrimonio-ausente {
+        color: var(--danger);
+        font-weight: 700;
+    }
+    .empty {
+        padding: 44px 18px;
+        text-align: center;
+        color: var(--muted);
+    }
+    footer {
+        text-align: center;
+        color: var(--muted);
+        font-size: .8rem;
+        padding: 18px 0 8px;
+    }
+
+    @media (max-width: 900px) {
+        .filters { grid-template-columns: 1fr; }
+        .summary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 520px) {
+        .container { width: min(100% - 20px, 1280px); }
+        header { padding: 24px 10px; }
+        main { padding-top: 14px; }
+        .summary { grid-template-columns: 1fr 1fr; gap: 8px; }
+        .card { padding: 12px; }
+        .card .value { font-size: 1.35rem; }
+        .table-head { align-items: flex-start; flex-direction: column; }
+    }
+
+    .header-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+    }
+
+    .theme-toggle {
+        border: 1px solid rgba(255,255,255,.25);
+        background: rgba(255,255,255,.12);
+        color: #fff;
+        backdrop-filter: blur(8px);
+        border-radius: 12px;
+        padding: 10px 14px;
+        font-weight: 700;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        box-shadow: 0 6px 18px rgba(0,0,0,.14);
+        transition: all .2s ease;
+        white-space: nowrap;
+    }
+
+    .theme-toggle:hover {
+        background: rgba(255,255,255,.2);
+        transform: translateY(-2px);
+        box-shadow: 0 9px 22px rgba(0,0,0,.2);
+    }
+
+    body.dark {
+        --bg: #171116;
+        --surface: #231a20;
+        --surface-2: #2a2026;
+        --text: #f5eaf0;
+        --muted: #b9a9b1;
+        --border: #49353f;
+        --shadow: 0 12px 30px rgba(0,0,0,.38);
+        --shadow-hover: 0 18px 40px rgba(0,0,0,.48);
+        background: radial-gradient(circle at top left, rgba(123,23,53,.22), transparent 34%), var(--bg);
+    }
+
+    body.dark select,
+    body.dark input {
+        background: #2a2026;
+        color: var(--text);
+        border-color: #59434d;
+    }
+
+    body.dark .btn {
+        background: linear-gradient(135deg, #922144, #68152f);
+    }
+
+    body.dark th {
+        background: #33242c;
+        color: #ead6df;
+        border-bottom-color: #4b3741;
+    }
+
+    body.dark td {
+        border-bottom-color: #3a2b33;
+    }
+
+    body.dark tbody tr:hover {
+        background: #302229;
+    }
+
+    body.dark .status {
+        background: #382d33;
+        color: #eadde2;
+    }
+
+    body.dark .status-ok {
+        background: #193d2d;
+        color: #91ddb5;
+    }
+
+    body.dark .status-maint {
+        background: #49391f;
+        color: #f2c978;
+    }
+
+    body.dark .status-old {
+        background: #4b252b;
+        color: #f1a4aa;
+    }
+
+    body.dark .filter-panel,
+    body.dark .card,
+    body.dark .table-panel {
+        border-color: #49353f;
+    }
+
+    @media (max-width: 650px) {
+        .header-top {
+            align-items: flex-start;
+            flex-direction: column;
         }
-
-        body {
-            margin: 0;
-            padding: 0;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
+        .theme-toggle {
+            align-self: stretch;
             justify-content: center;
-            /* Fundo degradê vermelho e preto simulando movimento de ondas */
-            background: linear-gradient(45deg, #050000, #1a0003, #4a0007, #1a0003, #050000);
-            background-size: 400% 400%;
-            animation: waveGradient 12s ease infinite;
-            overflow: hidden;
-            font-family: 'Poppins', sans-serif;
         }
+    }
 
-        /* Animação do fundo em ondas */
-        @keyframes waveGradient {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        .container {
-            text-align: center;
-            background: rgba(0, 0, 0, 0.4);
-            padding: 40px 60px;
-            border-radius: 20px;
-            backdrop-filter: blur(8px);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7);
-            border: 1px solid rgba(255, 77, 109, 0.1);
-            z-index: 10;
-        }
-
-        /* Título romântico e pulsante */
-        .title {
-            font-family: 'Dancing Script', cursive;
-            font-size: 3.5rem;
-            color: #ff4d6d;
-            margin: 0 0 40px 0;
-            text-shadow: 0 0 10px rgba(255, 77, 109, 0.5), 0 0 20px rgba(255, 77, 109, 0.3);
-            animation: pulseText 2s ease-in-out infinite alternate;
-        }
-
-        @keyframes pulseText {
-            0% { transform: scale(1); text-shadow: 0 0 10px rgba(255, 77, 109, 0.5); }
-            100% { transform: scale(1.03); text-shadow: 0 0 25px rgba(255, 77, 109, 0.8), 0 0 10px #ff0000; }
-        }
-
-        .btn-group {
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-            min-height: 60px;
-            align-items: center;
-        }
-
-        /* Estilização dos Botões com volume 3D */
-        .btn {
-            padding: 15px 35px;
-            font-size: 18px;
-            font-weight: 600;
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            font-family: 'Poppins', sans-serif;
-        }
-
-        /* Botão SIM - Tons de Rosa/Vermelho Romântico */
-        #sim {
-            background: linear-gradient(135deg, #ff4d6d, #ff758f);
-            color: #fff;
-            /* Sombras que dão ideia de volume (3D) */
-            box-shadow: 0 6px 0 #b7094c, 0 10px 20px rgba(0, 0, 0, 0.5);
-        }
-
-        #sim:hover {
-            background: linear-gradient(135deg, #ff758f, #ff8fa3);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 0 #b7094c, 0 12px 24px rgba(0, 0, 0, 0.6);
-        }
-
-        /* Efeito de clique físico (afundar) */
-        #sim:active {
-            transform: translateY(6px);
-            box-shadow: 0 0px 0 #b7094c, 0 4px 10px rgba(0, 0, 0, 0.4);
-        }
-
-        /* Botão NÃO - Tom sóbrio que vai fugir */
-        #nao {
-            background: linear-gradient(135deg, #4a4e69, #9a8c98);
-            color: #fff;
-            box-shadow: 0 6px 0 #22223b, 0 10px 20px rgba(0, 0, 0, 0.5);
-        }
-
-        /* Corações flutuantes */
-        .heart {
-            position: absolute;
-            color: #ff4d6d;
-            pointer-events: none;
-            font-size: 20px;
-            filter: drop-shadow(0 0 5px rgba(255,77,109,0.5));
-            animation: floatUp 5s linear forwards;
-            opacity: 0;
-            z-index: 1;
-        }
-
-        @keyframes floatUp {
-            0% {
-                transform: translateY(105vh) scale(0) rotate(0deg);
-                opacity: 0;
-            }
-            10% {
-                opacity: 0.7;
-            }
-            90% {
-                opacity: 0.7;
-            }
-            100% {
-                transform: translateY(-10vh) scale(1.5) rotate(360deg);
-                opacity: 0;
-            }
-        }
-    </style>
+</style>
 </head>
 <body>
-
+<header>
     <div class="container">
-        <h1 class="title">Cuzinho hoje? 🌹</h1>
-        <div class="btn-group">
-            <button id="sim" class="btn">Sim, com certeza!</button>
-            <button id="nao" class="btn">Não</button>
+        <div class="header-top">
+            <div>
+                <h1>Inventário de Ar-Condicionado 2026</h1>
+                <p>Consulte os equipamentos por setor, patrimônio, fabricante, modelo ou status.</p>
+            </div>
+            <button type="button" class="theme-toggle" id="themeToggle" aria-label="Alternar modo noturno">
+                <span id="themeIcon">☾</span>
+                <span id="themeText">Modo noturno</span>
+            </button>
         </div>
     </div>
+</header>
 
-    <script>
-        const simBtn = document.getElementById('sim');
-        const naoBtn = document.getElementById('nao');
+<main class="container">
+    <section class="filter-panel">
+        <div class="filters">
+            <div>
+                <label for="sector">Setor / Local</label>
+                <select id="sector">
+                    <option value="">Todos os setores</option>
+                </select>
+            </div>
+            <div>
+                <label for="search">Pesquisar equipamento</label>
+                <input id="search" type="search" placeholder="Ex.: LG, 29022, 18.000BTUS...">
+            </div>
+            <div>
+                <label for="statusFilter">Status</label>
+                <select id="statusFilter">
+                    <option value="">Todos os status</option>
+                </select>
+            </div>
+        </div>
+        <div style="margin-top:12px;">
+            <button type="button" class="btn" id="clearBtn">Limpar filtros</button>
+        </div>
+    </section>
 
-        // Redirecionamento do botão SIM
-        simBtn.addEventListener('click', () => {
-            window.location.href = 'https://www.youtube.com/watch?v=izGwDsrQ1eQ';
-        });
+    <section class="summary">
+        <div class="card">
+            <div class="label">Equipamentos</div>
+            <div class="value" id="total">0</div>
+        </div>
+        <div class="card success">
+            <div class="label">Em funcionamento</div>
+            <div class="value" id="working">0</div>
+        </div>
+        <div class="card warning">
+            <div class="label">Em manutenção</div>
+            <div class="value" id="maintenance">0</div>
+        </div>
+        <div class="card danger">
+            <div class="label">Obsoletos</div>
+            <div class="value" id="obsolete">0</div>
+        </div>
+        <div class="card danger">
+            <div class="label">Sem patrimônio</div>
+            <div class="value" id="noAsset">0</div>
+        </div>
+    </section>
 
-        // Função para mover o botão NÃO de forma inteligente na tela toda
-        function desviar() {
-            // Garante que o botão use posição absoluta para voar pela tela livremente
-            naoBtn.style.position = 'absolute';
-            
-            // Define limites para o botão não sumir completamente da barra de rolagem
-            const maxX = window.innerWidth - naoBtn.offsetWidth - 20;
-            const maxY = window.innerHeight - naoBtn.offsetHeight - 20;
+    <section class="table-panel">
+        <div class="table-head">
+            <h2 id="tableTitle">Equipamentos cadastrados</h2>
+            <span class="result-count" id="resultCount"></span>
+        </div>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Item</th>
+                        <th>Setor / Local</th>
+                        <th>Descrição</th>
+                        <th>Fabricante</th>
+                        <th>Capacidade / Modelo</th>
+                        <th>Patrimônio</th>
+                        <th>Status</th>
+                        <th>Observações</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody"></tbody>
+            </table>
+        </div>
+        <div class="empty" id="emptyState" hidden>Nenhum equipamento encontrado para os filtros selecionados.</div>
+    </section>
 
-            const randomX = Math.max(10, Math.floor(Math.random() * maxX));
-            const randomY = Math.max(10, Math.floor(Math.random() * maxY));
+    <footer>Base de dados: AR_INVENTARIO_2026.csv</footer>
+</main>
 
-            naoBtn.style.left = randomX + 'px';
-            naoBtn.style.top = randomY + 'px';
+<script>
+
+// Modo noturno
+const themeToggle = document.getElementById('themeToggle');
+const themeIcon = document.getElementById('themeIcon');
+const themeText = document.getElementById('themeText');
+
+function applyTheme(isDark) {
+    document.body.classList.toggle('dark', isDark);
+    themeIcon.textContent = isDark ? '☀' : '☾';
+    themeText.textContent = isDark ? 'Modo claro' : 'Modo noturno';
+    localStorage.setItem('inventario-theme', isDark ? 'dark' : 'light');
+}
+
+const savedTheme = localStorage.getItem('inventario-theme');
+applyTheme(savedTheme === 'dark');
+
+themeToggle.addEventListener('click', () => {
+    applyTheme(!document.body.classList.contains('dark'));
+});
+
+const equipamentos = [{"Item": "1", "Setor / Local": "ALMOXARIFADO", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "9.000BTUS", "Patrimônio": "29022", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "2", "Setor / Local": "ALMOXARIFADO", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "TCL", "Capacidade / Modelo": "12.000BTUS", "Patrimônio": "52449", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "3", "Setor / Local": "AMBULATÓRIO", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "12.000BTUS", "Patrimônio": "32935", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "4", "Setor / Local": "AMBULATÓRIO", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "9.000BTUS", "Patrimônio": "37777", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "5", "Setor / Local": "AMBULATÓRIO", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "9.000BTUS", "Patrimônio": "46191", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "6", "Setor / Local": "AMBULATÓRIO", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "9.000BTUS", "Patrimônio": "36098", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "7", "Setor / Local": "AMBULATÓRIO", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "BOSCH", "Capacidade / Modelo": "9.000BTUS", "Patrimônio": "32803", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "8", "Setor / Local": "AMBULATÓRIO", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "9.000BTUS", "Patrimônio": "24022", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "9", "Setor / Local": "AMBULATÓRIO", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "9.000BTUS", "Patrimônio": "36848", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "10", "Setor / Local": "AMBULATÓRIO", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "ELGIN", "Capacidade / Modelo": "9.000BTUS", "Patrimônio": "37232", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "11", "Setor / Local": "AMBULATÓRIO", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "9.000BTUS", "Patrimônio": "36849", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "12", "Setor / Local": "AMBULATÓRIO", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "PANASONIC", "Capacidade / Modelo": "9.000BTUS", "Patrimônio": "33150", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "13", "Setor / Local": "AMBULATÓRIO", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "ELGIN", "Capacidade / Modelo": "9.000BTUS", "Patrimônio": "37002", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "14", "Setor / Local": "AMBULATÓRIO", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "9.000BTUS", "Patrimônio": "36716", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "15", "Setor / Local": "AMBULATÓRIO", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "9.000BTUS", "Patrimônio": "37426", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "16", "Setor / Local": "AMBULATÓRIO", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "ELGIN", "Capacidade / Modelo": "9.000BTUS", "Patrimônio": "37005", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "17", "Setor / Local": "AMBULATÓRIO", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "9.000BTUS", "Patrimônio": "43343", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "18", "Setor / Local": "AMBULATÓRIO", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "PHILCO", "Capacidade / Modelo": "18.000BTUS", "Patrimônio": "39262", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "19", "Setor / Local": "AMBULATÓRIO", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "PHILCO", "Capacidade / Modelo": "9.000BTUS", "Patrimônio": "39264", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "20", "Setor / Local": "AMBULATÓRIO", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "9.000BTUS", "Patrimônio": "49134", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "21", "Setor / Local": "ANEXO PSICOLOGIA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "MIDEA", "Capacidade / Modelo": "18.000BTUS", "Patrimônio": "38388", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "22", "Setor / Local": "ASSESSORIA DE COMUNICAÇÃO", "Descrição do Equipamento": "UNIDADE CONDENSADORA + EVAPORADORA", "Fabricante": "MIDEA", "Capacidade / Modelo": "30.000BTUS", "Patrimônio": "29709", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "23", "Setor / Local": "BANCO DE SANGUE", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "GREE", "Capacidade / Modelo": "13.000BTUS", "Patrimônio": "31377", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "24", "Setor / Local": "BANCO DE SANGUE", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "MIDEA", "Capacidade / Modelo": "12.000BTUS", "Patrimônio": "26212", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "25", "Setor / Local": "BANCO DE SANGUE", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "PISO TETO - BOSH", "Capacidade / Modelo": "36.000BTUS", "Patrimônio": "31530", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "26", "Setor / Local": "C.C.I.H", "Descrição do Equipamento": "AR CONDICIONADO", "Fabricante": "PHILCO", "Capacidade / Modelo": "18.000BTUS", "Patrimônio": "39428", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "27", "Setor / Local": "CENTRAL DE PROJETOS", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "7.000BTUS", "Patrimônio": "35587", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "28", "Setor / Local": "CENTRAL DE PROJETOS", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "MIDEA", "Capacidade / Modelo": "18.000BTUS", "Patrimônio": "31801", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "29", "Setor / Local": "CENTRO CIRURGICO", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "-", "Capacidade / Modelo": "18.000BTUS", "Patrimônio": "50238", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "30", "Setor / Local": "CENTRO CIRURGICO", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "-", "Capacidade / Modelo": "18.000BTUS", "Patrimônio": "35271", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "31", "Setor / Local": "CENTRO CIRURGICO", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "-", "Capacidade / Modelo": "18.000BTUS", "Patrimônio": "35272", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "32", "Setor / Local": "CENTRO CIRURGICO", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "ELGIN", "Capacidade / Modelo": "18.000BTUS", "Patrimônio": "46317", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "33", "Setor / Local": "CENTRO CIRURGICO", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "-", "Capacidade / Modelo": "18.000BTUS", "Patrimônio": "25374", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "34", "Setor / Local": "CENTRO CIRURGICO", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "ELGIN", "Capacidade / Modelo": "30.00BTUS", "Patrimônio": "39909", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "35", "Setor / Local": "CENTRO CIRURGICO", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "-", "Capacidade / Modelo": "18.000BTUS", "Patrimônio": "50346", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "36", "Setor / Local": "CENTRO CIRURGICO", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "-", "Capacidade / Modelo": "18.000BTUS", "Patrimônio": "49970", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "37", "Setor / Local": "CENTRO CIRURGICO", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "-", "Capacidade / Modelo": "18.000BTUS", "Patrimônio": "35273", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "38", "Setor / Local": "CENTRO DE IMAGEM", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "22.000BTUS", "Patrimônio": "40649", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "39", "Setor / Local": "HOSPITAL DIA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "AGRATTO", "Capacidade / Modelo": "18.000BTUS", "Patrimônio": "46608", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "40", "Setor / Local": "HOSPITAL DIA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "12.000BTUS", "Patrimônio": "50479", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado (CONTROLE)"}, {"Item": "41", "Setor / Local": "HOSPITAL DIA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "12.000BTUS", "Patrimônio": "37890", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "42", "Setor / Local": "HOSPITAL DIA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "GREE", "Capacidade / Modelo": "13.000BTUS", "Patrimônio": "32006", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "43", "Setor / Local": "HOSPITAL DIA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "GREE", "Capacidade / Modelo": "18.000BTUS", "Patrimônio": "39230", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "44", "Setor / Local": "CENTRO DE IMAGEM", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "22.000BTUS", "Patrimônio": "40651", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "45", "Setor / Local": "CENTRO DE IMAGEM", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "12.000BTUS", "Patrimônio": "24398", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "46", "Setor / Local": "CENTRO DE IMAGEM", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "11.000BTUS", "Patrimônio": "44293", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "47", "Setor / Local": "CENTRO DE IMAGEM", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "18.000BTUS", "Patrimônio": "45553", "Status Atual": "OBSOLETO", "Observações": "COMPRAR AR LG dual inverter 18.000BTUS"}, {"Item": "48", "Setor / Local": "CENTRO DE IMAGEM", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "9.000BTUS", "Patrimônio": "43770", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "49", "Setor / Local": "CENTRO DE IMAGEM", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "ELGIN", "Capacidade / Modelo": "36.000BTUS", "Patrimônio": "52675", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "50", "Setor / Local": "CENTRO DE IMAGEM", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "ELGIN", "Capacidade / Modelo": "36.000BTUS", "Patrimônio": "52674", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "51", "Setor / Local": "CENTRO DE IMAGEM", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "12.000BTUS", "Patrimônio": "36713", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "52", "Setor / Local": "CENTRO DE IMAGEM", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "PHILCO", "Capacidade / Modelo": "9.000BTUS", "Patrimônio": "39468", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "53", "Setor / Local": "CENTRO DE IMAGEM", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "9.000BTUS", "Patrimônio": "25438", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "54", "Setor / Local": "CENTRO DE IMAGEM", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "9.000BTUS", "Patrimônio": "36997", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "55", "Setor / Local": "CENTRO DE IMAGEM", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "MIDEA", "Capacidade / Modelo": "48.000BTUS", "Patrimônio": "30979", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "56", "Setor / Local": "CENTRO DE IMAGEM", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "27.000BTUS", "Patrimônio": "30827", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "57", "Setor / Local": "CENTRO DE IMAGEM", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "18.000BTUS", "Patrimônio": "40446", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "58", "Setor / Local": "CENTRO DE IMAGEM", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "22.000BTUS", "Patrimônio": "41238", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "59", "Setor / Local": "CENTRO DE IMAGEM", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "GREE", "Capacidade / Modelo": "13.000BTUS", "Patrimônio": "39173", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "60", "Setor / Local": "CENTRO DE IMAGEM", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "12.000BTUS", "Patrimônio": "41514", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "61", "Setor / Local": "CENTRO DE IMAGEM", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "AGRATTO", "Capacidade / Modelo": "18.000BTUS", "Patrimônio": "50690", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "62", "Setor / Local": "CME", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "9.000BTUS", "Patrimônio": "25435", "Status Atual": "OBSOLETO", "Observações": "COMPRAR AR LG dual inverter 12.000BTUS"}, {"Item": "63", "Setor / Local": "CME", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "HITACHI", "Capacidade / Modelo": "36.000BTUS", "Patrimônio": "50700", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "64", "Setor / Local": "CME", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "SILVERMAX", "Capacidade / Modelo": "36.000BTUS", "Patrimônio": "47632", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "65", "Setor / Local": "CME", "Descrição do Equipamento": "UNID. EVAPORADORA SPLIT", "Fabricante": "LG", "Capacidade / Modelo": "18.000BTUS", "Patrimônio": "38405", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "66", "Setor / Local": "CME", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "GE", "Capacidade / Modelo": "7.000BTUS", "Patrimônio": "32948", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "67", "Setor / Local": "CME", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "7.000BTUS", "Patrimônio": "50934", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "68", "Setor / Local": "CME", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "18.000BTUS", "Patrimônio": "38405", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "69", "Setor / Local": "CME", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "18.000BTUS", "Patrimônio": "41638", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "70", "Setor / Local": "COOR. AMBULATORIO", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "9.000BTUS", "Patrimônio": "25400", "Status Atual": "OBSOLETO", "Observações": "COMPRAR AR LG dual inverter 12.000BTUS"}, {"Item": "71", "Setor / Local": "COZINHA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "AGRATO", "Capacidade / Modelo": "18.000BTUS", "Patrimônio": "50698", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "72", "Setor / Local": "DEPE", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "8.000BTUS", "Patrimônio": "38062", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "73", "Setor / Local": "DEPE", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "TLC", "Capacidade / Modelo": "12.000BTUS", "Patrimônio": "52491", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "74", "Setor / Local": "DEPE", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "TLC", "Capacidade / Modelo": "18.000BTUS", "Patrimônio": "49828", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "75", "Setor / Local": "DEPE", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "16.000BTUS", "Patrimônio": "49828", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "76", "Setor / Local": "DEPE", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "ELGIN", "Capacidade / Modelo": "60.000BTUS", "Patrimônio": "37988", "Status Atual": "EM MANUTENÇÃO", "Observações": "PEÇA PARA REPOSIÇÃO"}, {"Item": "77", "Setor / Local": "DEPE", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "MIDEA", "Capacidade / Modelo": "35.000BTUS", "Patrimônio": "37599", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "78", "Setor / Local": "DEPE", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "9.000BTUS", "Patrimônio": "42146", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "79", "Setor / Local": "DEPE", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "MIDEA", "Capacidade / Modelo": "35.000BTUS", "Patrimônio": "37600", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "80", "Setor / Local": "DEPE", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "CARRIER", "Capacidade / Modelo": "36.000BTUS", "Patrimônio": "50599", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "81", "Setor / Local": "DEPE", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "CLASSIC", "Capacidade / Modelo": "60.000BTUS", "Patrimônio": "37687", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado (somente ventilando)"}, {"Item": "82", "Setor / Local": "DEPE", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "ELGIN", "Capacidade / Modelo": "48.000BTUS", "Patrimônio": "37690", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "83", "Setor / Local": "DEPE", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "ELGIN", "Capacidade / Modelo": "48.000BTUS", "Patrimônio": "37688", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "84", "Setor / Local": "DEPE", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "TCL", "Capacidade / Modelo": "18.000BTUS", "Patrimônio": "49821", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "85", "Setor / Local": "DEPE", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "MIDEA", "Capacidade / Modelo": "35.000BTUS", "Patrimônio": "37579", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "86", "Setor / Local": "DEPE", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "TCL", "Capacidade / Modelo": "18.000BTUS", "Patrimônio": "49829", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "87", "Setor / Local": "DEPE", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "18.000BTUS", "Patrimônio": "29825", "Status Atual": "EM MANUTENÇÃO", "Observações": "PEÇA PARA REPOSIÇÃO"}, {"Item": "88", "Setor / Local": "DEPE", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "MIDEA", "Capacidade / Modelo": "30.000BTUS", "Patrimônio": "46265", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "89", "Setor / Local": "DEPE", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "AGRATTO", "Capacidade / Modelo": "24.000BTUS", "Patrimônio": "50829", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "90", "Setor / Local": "DEPE", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "22.000BTUS", "Patrimônio": "37550", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "91", "Setor / Local": "DEPE", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "9.000BTUS", "Patrimônio": "37493", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "92", "Setor / Local": "DEPE", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "9.000BTUS", "Patrimônio": "37485", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "93", "Setor / Local": "DEPE", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "9.000BTUS", "Patrimônio": "37441", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "94", "Setor / Local": "DEPE", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "12.000BTUS", "Patrimônio": "46912", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "95", "Setor / Local": "DEPE", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "18.000BTUS", "Patrimônio": "31802", "Status Atual": "EM MANUTENÇÃO", "Observações": "Verificado"}, {"Item": "96", "Setor / Local": "DEPE", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "12.000BTUS", "Patrimônio": "37435", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "97", "Setor / Local": "DEPE\\SALA FACIAL", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "12.000BTUS", "Patrimônio": "26212", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "98", "Setor / Local": "DEPE\\SALA FACIAL", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "12.000BTUS", "Patrimônio": "31377", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "99", "Setor / Local": "DEPE", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "GREEN", "Capacidade / Modelo": "9.000BTUS", "Patrimônio": "32471", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "100", "Setor / Local": "ELETRONICA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "ELECTROLUX", "Capacidade / Modelo": "12.000BTUS", "Patrimônio": "50023", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "101", "Setor / Local": "ELETRONICA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "12.000BTUS", "Patrimônio": "46837", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "102", "Setor / Local": "ELETRONICA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "12.000BTUS", "Patrimônio": "46421", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "103", "Setor / Local": "EMERGENCIA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "AGRATTO", "Capacidade / Modelo": "12.000BTUS", "Patrimônio": "50374", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "104", "Setor / Local": "EMERGENCIA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "24.000BTUS", "Patrimônio": "36258", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "105", "Setor / Local": "EMERGENCIA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "GREE", "Capacidade / Modelo": "9.000BTUS", "Patrimônio": "29909", "Status Atual": "OBSOLETO", "Observações": "COMPRAR AR LG dual inverter 12.000BTUS"}, {"Item": "106", "Setor / Local": "EMERGENCIA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "12.000BTUS", "Patrimônio": "32935", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "107", "Setor / Local": "EMERGENCIA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "PHILCO", "Capacidade / Modelo": "18.000BTUS", "Patrimônio": "39263", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado (Não funciona)"}, {"Item": "108", "Setor / Local": "EMERGENCIA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "12.000BTUS", "Patrimônio": "36950", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "109", "Setor / Local": "EMERGENCIA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "SPRINGER", "Capacidade / Modelo": "60.000BTUS", "Patrimônio": "50482", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "110", "Setor / Local": "EMERGENCIA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "MIDEA", "Capacidade / Modelo": "9.000BTUS", "Patrimônio": "40161", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "111", "Setor / Local": "EMERGENCIA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "SPRINGER", "Capacidade / Modelo": "9.000BTUS", "Patrimônio": "40193", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "112", "Setor / Local": "EMERGENCIA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "MIDEA", "Capacidade / Modelo": "18.000BTUS", "Patrimônio": "40676", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "113", "Setor / Local": "EMERGENCIA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "GREEE", "Capacidade / Modelo": "9.000BTUS", "Patrimônio": "31477", "Status Atual": "OBSOLETO", "Observações": "COMPRAR AR LG dual inverter 12.000BTUS"}, {"Item": "114", "Setor / Local": "EMERGENCIA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "12.000BTUS", "Patrimônio": "50415", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "115", "Setor / Local": "EMERGENCIA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "12.000BTUS", "Patrimônio": "50480", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "116", "Setor / Local": "EMERGENCIA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "PHILCO", "Capacidade / Modelo": "18.000BTUS", "Patrimônio": "39419", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "117", "Setor / Local": "EMERGENCIA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "ELGIN", "Capacidade / Modelo": "30.000BTUS", "Patrimônio": "49337", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "118", "Setor / Local": "EMERGENCIA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "GREE", "Capacidade / Modelo": "-", "Patrimônio": "41527", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "119", "Setor / Local": "EMERGENCIA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "ELGIN", "Capacidade / Modelo": "9.000BTUS", "Patrimônio": "37762", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "120", "Setor / Local": "EMERGENCIA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "ELGIN", "Capacidade / Modelo": "-", "Patrimônio": "39060", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "121", "Setor / Local": "EMERGENCIA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "-", "Patrimônio": "47068", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "122", "Setor / Local": "EMERGENCIA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "9.000BTUS", "Patrimônio": "36698", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "123", "Setor / Local": "EMERGENCIA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "MIDEA", "Capacidade / Modelo": "9.000BTUS", "Patrimônio": "26561", "Status Atual": "OBSOLETO", "Observações": "COMPRAR AR LG dual inverter 12.000BTUS"}, {"Item": "124", "Setor / Local": "EMERGENCIA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "24.000BTUS", "Patrimônio": "37763", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "125", "Setor / Local": "ENDOSCOPIA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "9.000BTUS", "Patrimônio": "42200", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "126", "Setor / Local": "ENDOSCOPIA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "PHILCO", "Capacidade / Modelo": "-", "Patrimônio": "39229", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "127", "Setor / Local": "ENGENHARIA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "12.000BTUS", "Patrimônio": "47820", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "128", "Setor / Local": "FARMACIA CENTRAL", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "MIDEA", "Capacidade / Modelo": "60.000BTUS", "Patrimônio": "52505", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "129", "Setor / Local": "FARMACIA CENTRAL", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "9.000BTUS", "Patrimônio": "34694", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "130", "Setor / Local": "FATURAMENTO SUS", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "ELGIM", "Capacidade / Modelo": "36.000BTUS", "Patrimônio": "37066", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "131", "Setor / Local": "FATURAMENTO SUS", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "-", "Capacidade / Modelo": "16.000BTUS", "Patrimônio": "32109", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "132", "Setor / Local": "FATURAMENTO SUS", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG INVERTER", "Capacidade / Modelo": "18.000BTUS", "Patrimônio": "46423", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "133", "Setor / Local": "FATURAMENTO SUS", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "MIDEA", "Capacidade / Modelo": "36.000BTUS", "Patrimônio": "29593", "Status Atual": "OBSOLETO", "Observações": "Verificado"}, {"Item": "134", "Setor / Local": "FONODILOGIA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "9.000BTUS", "Patrimônio": "25631", "Status Atual": "OBSOLETO", "Observações": "COMPRAR AR LG dual inverter 12.000BTUS MAQUINA FABRICADA NO ANO DE 2002"}, {"Item": "135", "Setor / Local": "GERENCIA DE RISCO", "Descrição do Equipamento": "UNID. EVAP + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "9.000BTUS", "Patrimônio": "31505", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "136", "Setor / Local": "GERENCIA DE RISCO", "Descrição do Equipamento": "CONDENSADOR + EVAPORADOR", "Fabricante": "GREE", "Capacidade / Modelo": "9.000BTUS", "Patrimônio": "29892", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "137", "Setor / Local": "GO", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "PHILCO", "Capacidade / Modelo": "18.000BTUS", "Patrimônio": "50171", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "138", "Setor / Local": "GUARITA POLICIA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "GREE", "Capacidade / Modelo": "9.000BTUS", "Patrimônio": "29880", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "139", "Setor / Local": "HEMODIALISE", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "9.000BTUS", "Patrimônio": "36238", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "140", "Setor / Local": "HEMODIALISE", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "12.000BTUS", "Patrimônio": "46058", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "141", "Setor / Local": "HEMODIALISE", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "SPRINGER", "Capacidade / Modelo": "9.000BTUS", "Patrimônio": "37768", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "142", "Setor / Local": "HEMODIALISE", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "9.000BTUS", "Patrimônio": "35395", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "143", "Setor / Local": "HEMODIALISE", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "COOLEX", "Capacidade / Modelo": "60.000BTUS", "Patrimônio": "26487", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "144", "Setor / Local": "HEMODIALISE", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "MIDEA", "Capacidade / Modelo": "60.000BTUS", "Patrimônio": "36237", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "145", "Setor / Local": "HEMODIALISE", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "PHILCO", "Capacidade / Modelo": "18.000BTUS", "Patrimônio": "39593", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "146", "Setor / Local": "HEMODIALISE", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "AGRATTO", "Capacidade / Modelo": "18.000BTUS", "Patrimônio": "50291", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "147", "Setor / Local": "HEMODIALISE", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "AGRATTO", "Capacidade / Modelo": "18.000BTUS", "Patrimônio": "50184", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "148", "Setor / Local": "HEMODIALISE", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "AGRATTO", "Capacidade / Modelo": "18.000BTUS", "Patrimônio": "50040", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "149", "Setor / Local": "HEMODIALISE", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "AGRATTO", "Capacidade / Modelo": "18.000BTUS", "Patrimônio": "50251", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "150", "Setor / Local": "HEMODIALISE", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "MIDEA", "Capacidade / Modelo": "60.000BTUS", "Patrimônio": "29552", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "151", "Setor / Local": "HEMODIALISE", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "MIDEA", "Capacidade / Modelo": "40.000BTUS", "Patrimônio": "29941", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "152", "Setor / Local": "HEMODIALISE", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "SILVERMAX", "Capacidade / Modelo": "60.000BTUS", "Patrimônio": "50356", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "153", "Setor / Local": "HEMODIALISE", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "18.000BTUS", "Patrimônio": "28618", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "154", "Setor / Local": "HEMODIALISE", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "9.000BTUS", "Patrimônio": "47155", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "155", "Setor / Local": "ILHA DO PEITO", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "PHILCO", "Capacidade / Modelo": "9.000BTUS", "Patrimônio": "39407", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "156", "Setor / Local": "INST. DA VISÃO", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "17.000BTUS", "Patrimônio": "49465", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "157", "Setor / Local": "INST. DA VISÃO", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "MIDEA", "Capacidade / Modelo": "12.000BTUS", "Patrimônio": "50656", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "158", "Setor / Local": "LABORATÓRIO", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "9.000BTUS", "Patrimônio": "36887", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "159", "Setor / Local": "LABORATÓRIO", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "GREE", "Capacidade / Modelo": "12.000BTUS", "Patrimônio": "38878", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "160", "Setor / Local": "LABORATÓRIO", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "12.000BTUS", "Patrimônio": "34242", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "161", "Setor / Local": "LABORATÓRIO", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "9.000BTUS", "Patrimônio": "35087", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "162", "Setor / Local": "LABORATÓRIO", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "VIX", "Capacidade / Modelo": "24.000BTUS", "Patrimônio": "51161", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "163", "Setor / Local": "LABORATÓRIO", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "18.000BTUS", "Patrimônio": "34719", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "164", "Setor / Local": "LABORATÓRIO", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "9.000BTUS", "Patrimônio": "35086", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "165", "Setor / Local": "LABORATÓRIO", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "GREE", "Capacidade / Modelo": "7.000BTUS", "Patrimônio": "30890", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "166", "Setor / Local": "LABORATÓRIO", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "MIDEA", "Capacidade / Modelo": "12.000BTUS", "Patrimônio": "26535", "Status Atual": "OBSOLETO", "Observações": "COMPRAR AR LG dual inverter 12.000BTUS"}, {"Item": "167", "Setor / Local": "LABORATÓRIO", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "24.000BTUS", "Patrimônio": "35226", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "168", "Setor / Local": "LABORATÓRIO", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "11.000BTUS", "Patrimônio": "49501", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "169", "Setor / Local": "LACTÁRIO", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "12.000BTUS", "Patrimônio": "36200", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "170", "Setor / Local": "MANUTENÇÃO", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "12.000BTUS", "Patrimônio": "46271", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "171", "Setor / Local": "MANUTENÇÃO", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "9.000BTUS", "Patrimônio": "25362", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "172", "Setor / Local": "MANUTENÇÃO HEMODIALISE (DEPE)", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "GREE", "Capacidade / Modelo": "13.000BTUS", "Patrimônio": "32003", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "173", "Setor / Local": "MATERNIDADE", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "9.000BTUS", "Patrimônio": "33228", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "174", "Setor / Local": "MATERNIDADE", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "TCL", "Capacidade / Modelo": "18.000BTUS", "Patrimônio": "50909", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "175", "Setor / Local": "MATERNIDADE", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "18.000BTUS", "Patrimônio": "46428", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "176", "Setor / Local": "MATERNIDADE", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "9.000BTUS", "Patrimônio": "40338", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "177", "Setor / Local": "MATERNIDADE", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "18.000BTUS", "Patrimônio": "40326", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "178", "Setor / Local": "MATERNIDADE", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "18.000BTUS", "Patrimônio": "49201", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "179", "Setor / Local": "MATERNIDADE \\ CENTRO DE PARTO", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "18.000BTUS", "Patrimônio": "40394", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "180", "Setor / Local": "MATERNIDADE \\ CENTRO DE PARTO", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "SPRINGER", "Capacidade / Modelo": "22.000BTUS", "Patrimônio": "52313", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "181", "Setor / Local": "MATERNIDADE \\ CENTRO DE PARTO", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "12.000BTUS", "Patrimônio": "40415", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "182", "Setor / Local": "MATERNIDADE \\ CENTRO DE PARTO", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "TCL", "Capacidade / Modelo": "12.000BTUS", "Patrimônio": "52446", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "183", "Setor / Local": "MATERNIDADE", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "12.000BTUS", "Patrimônio": "39328", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "184", "Setor / Local": "MATERNIDADE", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "GREE", "Capacidade / Modelo": "9.000BTUS", "Patrimônio": "39381", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "185", "Setor / Local": "MATERNIDADE", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "GREE", "Capacidade / Modelo": "9.000BTUS", "Patrimônio": "31502", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "186", "Setor / Local": "MATERNIDADE", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "GREE", "Capacidade / Modelo": "12;000BTUS", "Patrimônio": "50505", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "187", "Setor / Local": "MATERNIDADE\\ ADM", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "ELGIN", "Capacidade / Modelo": "9.000BTUS", "Patrimônio": "49999", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "188", "Setor / Local": "MATERNIDADE\\ ADM", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "9.000BTUS", "Patrimônio": "38166", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "189", "Setor / Local": "MATERNIDADE\\ ADM", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "9.000BTUS", "Patrimônio": "42183", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "190", "Setor / Local": "MATERNIDADE\\ ADM", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "18.000BTUS", "Patrimônio": "43381", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "191", "Setor / Local": "MATERNIDADE\\ ADM", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "12.000BTUS", "Patrimônio": "24292", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "192", "Setor / Local": "MATERNIDADE", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "GREE", "Capacidade / Modelo": "18.000BTUS", "Patrimônio": "39905", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "193", "Setor / Local": "NUCLEO HOSP. DE EPIDEMIOLOGIA", "Descrição do Equipamento": "UNID. EVAPORADOR SPLIT", "Fabricante": "LG", "Capacidade / Modelo": "9.000BTUS", "Patrimônio": "36699", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "194", "Setor / Local": "ONCOLOGIA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "7.500BTUS", "Patrimônio": "41403", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado (MOFO)"}, {"Item": "195", "Setor / Local": "ONCOLOGIA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "GREE", "Capacidade / Modelo": "12.000BTUS", "Patrimônio": "50600", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "196", "Setor / Local": "ONCOLOGIA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "MIDEA", "Capacidade / Modelo": "18.000BTUS", "Patrimônio": "51250", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "197", "Setor / Local": "ONCOLOGIA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "SPRINGER", "Capacidade / Modelo": "12.000BTUS", "Patrimônio": "51389", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "198", "Setor / Local": "ONCOLOGIA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "18.000BTUS", "Patrimônio": "45618", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "199", "Setor / Local": "ONCOLOGIA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "MIDEA", "Capacidade / Modelo": "9.000BTUS", "Patrimônio": "25066", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "200", "Setor / Local": "ONCOLOGIA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "GREE", "Capacidade / Modelo": "12.000BTUS", "Patrimônio": "50995", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "201", "Setor / Local": "ONCOLOGIA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "GREE", "Capacidade / Modelo": "12.000BTUS", "Patrimônio": "50598", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "202", "Setor / Local": "ONCOLOGIA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "GREE", "Capacidade / Modelo": "12.000BTUS", "Patrimônio": "51493", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "203", "Setor / Local": "ONCOLOGIA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "GREE", "Capacidade / Modelo": "12.000BTUS", "Patrimônio": "50821", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "204", "Setor / Local": "ONCOLOGIA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "CARRIER", "Capacidade / Modelo": "36.000BTUS", "Patrimônio": "50566", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "205", "Setor / Local": "ONCOLOGIA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "MIDEA", "Capacidade / Modelo": "12.000BTUS", "Patrimônio": "50576", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "206", "Setor / Local": "ONCOLOGIA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "MIDEA", "Capacidade / Modelo": "12.000BTUS", "Patrimônio": "51220", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "207", "Setor / Local": "ONCOLOGIA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "MIDEA", "Capacidade / Modelo": "12.000BTUS", "Patrimônio": "51457", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "208", "Setor / Local": "ONCOLOGIA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "CARRIER", "Capacidade / Modelo": "36.000BTUS", "Patrimônio": "50859", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "209", "Setor / Local": "ONCOLOGIA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "AGRATTO", "Capacidade / Modelo": "24.000BTUS", "Patrimônio": "50988", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "210", "Setor / Local": "ONCOLOGIA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "9.000BTUS", "Patrimônio": "45618", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "211", "Setor / Local": "NO BREAK - ACR", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "GREE", "Capacidade / Modelo": "12.000BTUS", "Patrimônio": "50570", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "212", "Setor / Local": "ONCOLOGIA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "CARRIER", "Capacidade / Modelo": "36.000BTUS", "Patrimônio": "50871", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "213", "Setor / Local": "OPME", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "9.000BTUS", "Patrimônio": "42146", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "214", "Setor / Local": "ORTOPEDIA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "18.000BTUS", "Patrimônio": "43638", "Status Atual": "OBSOLETO", "Observações": "Verificado"}, {"Item": "215", "Setor / Local": "ORTOPEDIA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "GREE", "Capacidade / Modelo": "-", "Patrimônio": "29667", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "216", "Setor / Local": "ORTOPEDIA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "24.00BTUS", "Patrimônio": "33201", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "217", "Setor / Local": "ORTOPEDIA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "MIDEA", "Capacidade / Modelo": "17.000BTUS", "Patrimônio": "36861", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "218", "Setor / Local": "OUVIDORIA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "GREE", "Capacidade / Modelo": "9.000BTUS", "Patrimônio": "29909", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "219", "Setor / Local": "PATOLOGIA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "ELGIN", "Capacidade / Modelo": "-", "Patrimônio": "39265", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "220", "Setor / Local": "PATOLOGIA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "36.000BTUS", "Patrimônio": "24696", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "221", "Setor / Local": "PATOLOGIA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "GREE", "Capacidade / Modelo": "9.000BTUS", "Patrimônio": "32234", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "222", "Setor / Local": "PEDIATRIA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "GREE", "Capacidade / Modelo": "9.000BTUS", "Patrimônio": "39590", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "223", "Setor / Local": "PEDIATRIA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "GREE", "Capacidade / Modelo": "12000BTUS", "Patrimônio": "41716", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "224", "Setor / Local": "PEDIATRIA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "18.000BTUS", "Patrimônio": "50273", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "225", "Setor / Local": "PEDIATRIA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "18.000BTUS", "Patrimônio": "50013", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "226", "Setor / Local": "QUIMIOTERAPIA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "18.000BTUS", "Patrimônio": "50860", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "227", "Setor / Local": "QUIMIOTERAPIA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "9.000BTUS", "Patrimônio": "44056", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "228", "Setor / Local": "QUIMIOTERAPIA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "MIDEA", "Capacidade / Modelo": "12.000BTUS", "Patrimônio": "51732", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "229", "Setor / Local": "QUIMIOTERAPIA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "MIDEA", "Capacidade / Modelo": "18.000BTUS", "Patrimônio": "51727", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "230", "Setor / Local": "QUIMIOTERAPIA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "MIDEA", "Capacidade / Modelo": "18.000BTUS", "Patrimônio": "51730", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "231", "Setor / Local": "CLINICA MÉDICA 1", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "24.000BTUS", "Patrimônio": "36187", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "232", "Setor / Local": "CLINICA MÉDICA 1", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "9.000BTUS", "Patrimônio": "52488", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "233", "Setor / Local": "CLINICA MÉDICA 1", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "12.000BTUS", "Patrimônio": "44048", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "234", "Setor / Local": "QUIMIOTERAPIA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "9.000BTUS", "Patrimônio": "44246", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "235", "Setor / Local": "QUIMIOTERAPIA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "9.000BTUS", "Patrimônio": "35741", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "236", "Setor / Local": "QUIMIOTERAPIA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "9.000BTUS", "Patrimônio": "44177", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "237", "Setor / Local": "QUIMIOTERAPIA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "9.000BTUS", "Patrimônio": "44193", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "238", "Setor / Local": "QUIMIOTERAPIA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "PHILCO", "Capacidade / Modelo": "9.000BTUS", "Patrimônio": "39600", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "239", "Setor / Local": "RECURSOS HUMANOS", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "CLASSIC", "Capacidade / Modelo": "60.000BTUS", "Patrimônio": "37689", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "240", "Setor / Local": "RECURSOS HUMANOS", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "12.000BTUS", "Patrimônio": "29702", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "241", "Setor / Local": "RESPONSABILIDADE SOCIAL", "Descrição do Equipamento": "UNIDADE EVAP/CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "12.000BTUS", "Patrimônio": "47880", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "242", "Setor / Local": "SALA DE ESTUDOS - NEO 2", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "12.000BTUS", "Patrimônio": "49324", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado (CÓDIGO P0)"}, {"Item": "243", "Setor / Local": "SALA DE RECUPERA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "MIDEA", "Capacidade / Modelo": "48.000BTUS", "Patrimônio": "50404", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "244", "Setor / Local": "SALA DE RECUPERA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "COOLIX", "Capacidade / Modelo": "48.000BTUS", "Patrimônio": "26170", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "245", "Setor / Local": "SALA DE RECUPERA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "HITACHI", "Capacidade / Modelo": "60.000BTUS", "Patrimônio": "46280", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "246", "Setor / Local": "SAME", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "12.000BTUS", "Patrimônio": "35076", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "247", "Setor / Local": "SAME", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "9.000BTUS", "Patrimônio": "35371", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "248", "Setor / Local": "SAME", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "12.000BTUS", "Patrimônio": "47084", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "249", "Setor / Local": "SERVIÇO SOCIAL", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "MIDEA", "Capacidade / Modelo": "12.000BTUS", "Patrimônio": "50656", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "250", "Setor / Local": "SERVIÇO SOCIAL", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "18.000BTUS", "Patrimônio": "49665", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "251", "Setor / Local": "SESMT", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "MIDEA", "Capacidade / Modelo": "18.000BTUS", "Patrimônio": "38148", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "252", "Setor / Local": "SESMT", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "9.000BTUS", "Patrimônio": "37761", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "253", "Setor / Local": "SESMT", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "9.000BTUS", "Patrimônio": "32782", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "254", "Setor / Local": "SESMT", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "GREE", "Capacidade / Modelo": "7.000BTUS", "Patrimônio": "32007", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado (sem patrimônio)"}, {"Item": "255", "Setor / Local": "SÃO JOAQUIM/REPOUSO", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "MIDEA", "Capacidade / Modelo": "9.000BTUS", "Patrimônio": "52062", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "256", "Setor / Local": "SÃO JOAQUIM", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "GREE", "Capacidade / Modelo": "9.000BTUS", "Patrimônio": "32035", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "257", "Setor / Local": "SÃO JOAQUIM", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "18.000BTUS", "Patrimônio": "35709", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "258", "Setor / Local": "SÃO JOAQUIM", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "9.000BTUS", "Patrimônio": "36995", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "259", "Setor / Local": "SÃO JOAQUIM", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "9.000BTUS", "Patrimônio": "35227", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "260", "Setor / Local": "SÃO JOAQUIM", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "GREE", "Capacidade / Modelo": "7.000BTUS", "Patrimônio": "30529", "Status Atual": "OBSOLETO", "Observações": "COMPRAR AR LG dual inverter 12.000BTUS"}, {"Item": "261", "Setor / Local": "SÃO JOAQUIM", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "MIDEA", "Capacidade / Modelo": "30.000BTUS", "Patrimônio": "50905", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "262", "Setor / Local": "SÃO JOSÉ \\ SALA DE ESTUDOS", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "ELGIN", "Capacidade / Modelo": "18.000BTUS", "Patrimônio": "49953", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "263", "Setor / Local": "SÃO JOSÉ", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "GREE", "Capacidade / Modelo": "12.000BTUS", "Patrimônio": "49854", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "264", "Setor / Local": "SÃO JOSÉ", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "9.000BTUS", "Patrimônio": "38898", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "265", "Setor / Local": "T.I", "Descrição do Equipamento": "AR CONDICIONADO", "Fabricante": "PHILCO", "Capacidade / Modelo": "9.000BTUS", "Patrimônio": "39385", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "266", "Setor / Local": "T.I", "Descrição do Equipamento": "AR CONDICIONADO", "Fabricante": "SPRINGER", "Capacidade / Modelo": "10.000BTUS", "Patrimônio": "23702", "Status Atual": "OBSOLETO", "Observações": "Verificado (Sala das baterias)"}, {"Item": "267", "Setor / Local": "T.I", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "GREE", "Capacidade / Modelo": "18.000BTUS", "Patrimônio": "39224", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "268", "Setor / Local": "T.I", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "24.000BTUS", "Patrimônio": "31807", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "269", "Setor / Local": "T.I", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "ELETROLUX", "Capacidade / Modelo": "36.000BTUS", "Patrimônio": "36085", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "270", "Setor / Local": "T.I", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "12.000BTUS", "Patrimônio": "32781", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "271", "Setor / Local": "TERAPIA OCUPACIONAL", "Descrição do Equipamento": "UNID. EVAPORADORA", "Fabricante": "SPRINGER", "Capacidade / Modelo": "18.000BTUS", "Patrimônio": "36119", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "272", "Setor / Local": "UTI ADULTO 01", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "GREE", "Capacidade / Modelo": "7.000BTUS", "Patrimônio": "32008", "Status Atual": "OBSOLETO", "Observações": "COMPRAR AR LG dual inverter 12.000BTUS"}, {"Item": "273", "Setor / Local": "UTI ADULTO 01", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG INVERTER", "Capacidade / Modelo": "18.000BTUS", "Patrimônio": "49960", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "274", "Setor / Local": "UTI ADULTO 01\\REPOUSO FEM", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG INVERTER", "Capacidade / Modelo": "18.000BTUS", "Patrimônio": "43777", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "275", "Setor / Local": "UTI ADULTO 01", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "12.000BTUS", "Patrimônio": "50925", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "276", "Setor / Local": "UTI ADULTO 01\\COORDENAÇÃO", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG INVERTER", "Capacidade / Modelo": "19.000BTUS", "Patrimônio": "46430", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado (2 MESES EM MANUTENÇÃO)"}, {"Item": "277", "Setor / Local": "UTI ADULTO 01", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "GREE", "Capacidade / Modelo": "7.000BTUS", "Patrimônio": "32004", "Status Atual": "OBSOLETO", "Observações": "COMPRAR AR LG dual inverter 12.000BTUS"}, {"Item": "278", "Setor / Local": "UTI ADULTO 01", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "GREE", "Capacidade / Modelo": "7.000BTUS", "Patrimônio": "32013", "Status Atual": "OBSOLETO", "Observações": "COMPRAR AR LG dual inverter 12.000BTUS"}, {"Item": "279", "Setor / Local": "UTI ADULTO 01", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "19.000BTUS", "Patrimônio": "46417", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "280", "Setor / Local": "UTI NEO 2", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "SILVERMAX", "Capacidade / Modelo": "60.000BTUS", "Patrimônio": "50352", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verfificado"}, {"Item": "281", "Setor / Local": "UTI NEO 2", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "GREE", "Capacidade / Modelo": "7.000BTUS", "Patrimônio": "30190", "Status Atual": "OBSOLETO", "Observações": "COMPRAR AR LG dual inverter 12.000BTUS"}, {"Item": "282", "Setor / Local": "UTI NEO 2", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "GREE", "Capacidade / Modelo": "7.000BTUS", "Patrimônio": "30300", "Status Atual": "OBSOLETO", "Observações": "COMPRAR AR LG dual inverter 12.000BTUS"}, {"Item": "283", "Setor / Local": "UTI PEDIATRICA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "GREE", "Capacidade / Modelo": "7.000BTUS", "Patrimônio": "30499", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "284", "Setor / Local": "UTI PEDIATRICA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "GREE", "Capacidade / Modelo": "9.000BTUS", "Patrimônio": "30500", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "285", "Setor / Local": "UTI PEDIATRICA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "GREE", "Capacidade / Modelo": "9.000BTUS", "Patrimônio": "30396", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "286", "Setor / Local": "UTI PEDIATRICA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "GREE", "Capacidade / Modelo": "9.000BTUS", "Patrimônio": "30489", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "287", "Setor / Local": "UTI PEDIATRICA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "GREE", "Capacidade / Modelo": "7.000BTUS", "Patrimônio": "30486", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "288", "Setor / Local": "UTI PEDIATRICA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "SAMSUNG", "Capacidade / Modelo": "12.000BTUS", "Patrimônio": "45224", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "289", "Setor / Local": "TESOURARIA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "ELGIN", "Capacidade / Modelo": "36.000BTUS", "Patrimônio": "35918", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado (condensação na evaporadora)"}, {"Item": "290", "Setor / Local": "TESOURARIA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "-", "Capacidade / Modelo": "-", "Patrimônio": "36996", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "291", "Setor / Local": "JURÍDICO", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "12.000BTUS", "Patrimônio": "52664", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "292", "Setor / Local": "JURÍDICO", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "12.000BTUS", "Patrimônio": "52017", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "293", "Setor / Local": "JURÍDICO", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "-", "Capacidade / Modelo": "-", "Patrimônio": "23775", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado (PROBLEMA NA TEMPERATURA)"}, {"Item": "294", "Setor / Local": "JURÍDICO", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "9.000BTUS", "Patrimônio": "44456", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "295", "Setor / Local": "AMBULATÓRIO", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "9.000BTUS", "Patrimônio": "-", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "296", "Setor / Local": "BANCO DE OLHOS", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "CONSUL", "Capacidade / Modelo": "9.000BTUS", "Patrimônio": "-", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "297", "Setor / Local": "BANCO DE OLHOS", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "PHILCO", "Capacidade / Modelo": "9.000BTUS", "Patrimônio": "-", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "298", "Setor / Local": "BANCO DE OLHOS", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "CONSUL", "Capacidade / Modelo": "9.000BTUS", "Patrimônio": "-", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "299", "Setor / Local": "BANCO DE OLHOS", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "CONSUL", "Capacidade / Modelo": "9.000BTUS", "Patrimônio": "-", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "300", "Setor / Local": "CENTRO CIRURGICO", "Descrição do Equipamento": "SPLITÃO FIXO (DUTADO)", "Fabricante": "TROX", "Capacidade / Modelo": "15TR'S", "Patrimônio": "-", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "301", "Setor / Local": "CENTRO CIRURGICO", "Descrição do Equipamento": "SPLITÃO FIXO (DUTADO)", "Fabricante": "TROX", "Capacidade / Modelo": "15TR'S", "Patrimônio": "-", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "302", "Setor / Local": "CENTRO CIRURGICO", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "COLIX", "Capacidade / Modelo": "60.000BTUS", "Patrimônio": "-", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "303", "Setor / Local": "CENTRO CIRURGICO", "Descrição do Equipamento": "CONDESADORA REMOTO AA", "Fabricante": "HITACHI", "Capacidade / Modelo": "7.5TR'S", "Patrimônio": "-", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "304", "Setor / Local": "CENTRO CIRURGICO", "Descrição do Equipamento": "CONDESADORA REMOTO AA", "Fabricante": "HITACHI", "Capacidade / Modelo": "7.5TR'S", "Patrimônio": "-", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "305", "Setor / Local": "CENTRO CIRURGICO", "Descrição do Equipamento": "CONDESADORA REMOTO AA", "Fabricante": "HITACHI", "Capacidade / Modelo": "7.5TR'S", "Patrimônio": "-", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "306", "Setor / Local": "CENTRO CIRURGICO", "Descrição do Equipamento": "CONDESADORA REMOTO AA", "Fabricante": "HITACHI", "Capacidade / Modelo": "7.5TR'S", "Patrimônio": "-", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "307", "Setor / Local": "CENTRO CIRURGICO", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "CARRIER", "Capacidade / Modelo": "18.000BTUS", "Patrimônio": "-", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "308", "Setor / Local": "CENTRO CIRURGICO", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "HITACHI", "Capacidade / Modelo": "60.000BTUS", "Patrimônio": "-", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "309", "Setor / Local": "CENTRO DE IMAGEM", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "GREE", "Capacidade / Modelo": "13.000BTUS", "Patrimônio": "-", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "310", "Setor / Local": "CME", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "7500BTUS", "Patrimônio": "-", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "311", "Setor / Local": "CME", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "ELGIN", "Capacidade / Modelo": "36.000BTUS", "Patrimônio": "-", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "312", "Setor / Local": "CME", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "18.000BTUS", "Patrimônio": "-", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "313", "Setor / Local": "CME", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "7500BTUS", "Patrimônio": "-", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "314", "Setor / Local": "CME", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "MIDEA", "Capacidade / Modelo": "36.000BTUS", "Patrimônio": "-", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "315", "Setor / Local": "CME", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "MIDEA", "Capacidade / Modelo": "60.000BTUS", "Patrimônio": "-", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "316", "Setor / Local": "CME", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "MEDIA", "Capacidade / Modelo": "36.000BTUS", "Patrimônio": "-", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "317", "Setor / Local": "EMERGENCIA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "PHILCO", "Capacidade / Modelo": "18.000BTUS", "Patrimônio": "-", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "318", "Setor / Local": "EMERGENCIA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "SPRINGER", "Capacidade / Modelo": "9.000BTUS", "Patrimônio": "-", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "319", "Setor / Local": "EMERGENCIA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "9.000BTUS", "Patrimônio": "-", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "320", "Setor / Local": "EMERGENCIA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "COOLI", "Capacidade / Modelo": "-", "Patrimônio": "-", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "321", "Setor / Local": "ENDOSCOPIA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "-", "Patrimônio": "-", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "322", "Setor / Local": "LACTÁRIO", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "-", "Patrimônio": "-", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "323", "Setor / Local": "MATERNIDADE", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "MIDEA", "Capacidade / Modelo": "18.000BTUS", "Patrimônio": "-", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "324", "Setor / Local": "MATERNIDADE", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "MIDEA", "Capacidade / Modelo": "12;000BTUS", "Patrimônio": "-", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "325", "Setor / Local": "MATERNIDADE", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "MIDEA", "Capacidade / Modelo": "9.000BTUS", "Patrimônio": "-", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "326", "Setor / Local": "MATERNIDADE", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "GREE", "Capacidade / Modelo": "18.000BTUS", "Patrimônio": "-", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "327", "Setor / Local": "MATERNIDADE \\ CENTRO DE PARTO", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "-", "Capacidade / Modelo": "-", "Patrimônio": "-", "Status Atual": "-", "Observações": "Verificado (MANUTENÇÃO NÃO RETORNOU)"}, {"Item": "328", "Setor / Local": "MATERNIDADE", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "GREE", "Capacidade / Modelo": "9.000BTUS", "Patrimônio": "-", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "329", "Setor / Local": "MATERNIDADE", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "GREE", "Capacidade / Modelo": "9.000BTUS", "Patrimônio": "-", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "330", "Setor / Local": "MATERNIDADE", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "PHILCO", "Capacidade / Modelo": "9.000BTUS", "Patrimônio": "-", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "331", "Setor / Local": "MATERNIDADE", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "12.000BTUS", "Patrimônio": "-", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "332", "Setor / Local": "MATERNIDADE", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "GREE", "Capacidade / Modelo": "24.000BTUS", "Patrimônio": "-", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "333", "Setor / Local": "MATERNIDADE", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "24.000BTUS", "Patrimônio": "-", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "334", "Setor / Local": "MATERNIDADE", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "7.00BTUS", "Patrimônio": "-", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "335", "Setor / Local": "MATERNIDADE", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "9.000BTUS", "Patrimônio": "-", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "336", "Setor / Local": "MATERNIDADE", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "9.000BTUS", "Patrimônio": "-", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "337", "Setor / Local": "ONCOLOGIA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "SPRINGER", "Capacidade / Modelo": "12.000BTUS", "Patrimônio": "-", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "338", "Setor / Local": "ONCOLOGIA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "SPRINGER", "Capacidade / Modelo": "12.000BTUS", "Patrimônio": "-", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "339", "Setor / Local": "ONCOLOGIA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "SPRINGER", "Capacidade / Modelo": "18.000BTUS", "Patrimônio": "-", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "340", "Setor / Local": "ONCOLOGIA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "18.000BTUS", "Patrimônio": "-", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "341", "Setor / Local": "ONCOLOGIA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "MIDEA", "Capacidade / Modelo": "12.000BTUS", "Patrimônio": "-", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "342", "Setor / Local": "ONCOLOGIA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "SPRINGER", "Capacidade / Modelo": "18.000BTUS", "Patrimônio": "-", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "343", "Setor / Local": "ONCOLOGIA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "SPRINGER", "Capacidade / Modelo": "18.000BTUS", "Patrimônio": "-", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "344", "Setor / Local": "ONCOLOGIA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "MIDEA", "Capacidade / Modelo": "12.000BTUS", "Patrimônio": "-", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "345", "Setor / Local": "ONCOLOGIA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "12.000BTUS", "Patrimônio": "-", "Status Atual": "EM FUNCIONAMENTO", "Observações": "TOMBO NÃO TEM"}, {"Item": "346", "Setor / Local": "ONCOLOGIA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "12.000BTUS", "Patrimônio": "-", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "347", "Setor / Local": "ONCOLOGIA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "LG", "Capacidade / Modelo": "24.000BTUS", "Patrimônio": "-", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "348", "Setor / Local": "PEDIATRIA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "AGRATTO", "Capacidade / Modelo": "18.000BTUS", "Patrimônio": "-", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "349", "Setor / Local": "PEDIATRIA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "BOSH", "Capacidade / Modelo": "18.000BTUS", "Patrimônio": "-", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "350", "Setor / Local": "QUIMIOTERAPIA", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "MIDEA", "Capacidade / Modelo": "9.000BTUS", "Patrimônio": "-", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "351", "Setor / Local": "RADIOTERAPIA", "Descrição do Equipamento": "CHILEER AA 2", "Fabricante": "TRANSCALOR", "Capacidade / Modelo": "45KCAL/h", "Patrimônio": "-", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "352", "Setor / Local": "RADIOTERAPIA", "Descrição do Equipamento": "CHILEER AA 1", "Fabricante": "TRANSCALOR", "Capacidade / Modelo": "45KCAL/h", "Patrimônio": "-", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "353", "Setor / Local": "RADIOTERAPIA", "Descrição do Equipamento": "TROCADOR DE CALOR", "Fabricante": "TRANSCALOR", "Capacidade / Modelo": "25KCAL/h", "Patrimônio": "-", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "354", "Setor / Local": "RADIOTERAPIA", "Descrição do Equipamento": "FAN COOL", "Fabricante": "TROX", "Capacidade / Modelo": "27,52KCAL/h", "Patrimônio": "-", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "355", "Setor / Local": "Ressonancia", "Descrição do Equipamento": "CHILEER AA", "Fabricante": "MECALOR", "Capacidade / Modelo": "15KCAL/h", "Patrimônio": "-", "Status Atual": "EM FUNCIONAMENTO", "Observações": "NECESSITA TROCA"}, {"Item": "356", "Setor / Local": "Ressonancia", "Descrição do Equipamento": "SPLITÃO FIXO (DUTADO)", "Fabricante": "CARRIER", "Capacidade / Modelo": "5TR'S", "Patrimônio": "-", "Status Atual": "EM FUNCIONAMENTO", "Observações": "NECESSITA TROCA"}, {"Item": "357", "Setor / Local": "Ressonancia", "Descrição do Equipamento": "SPLITÃO FIXO (DUTADO)", "Fabricante": "CARRIER", "Capacidade / Modelo": "7.5TR'S", "Patrimônio": "-", "Status Atual": "EM FUNCIONAMENTO", "Observações": "NECESSITA TROCA"}, {"Item": "358", "Setor / Local": "Ressonancia", "Descrição do Equipamento": "SPLITÃO FIXO (DUTADO)", "Fabricante": "CARRIER", "Capacidade / Modelo": "7.5TR'S", "Patrimônio": "-", "Status Atual": "EM FUNCIONAMENTO", "Observações": "NECESSITA TROCA"}, {"Item": "359", "Setor / Local": "SÃO JOAQUIM", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "GREE", "Capacidade / Modelo": "12.000BTUS", "Patrimônio": "-", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "360", "Setor / Local": "UTI ADULTO 01\\REPOUSO MASC", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "PHILCO", "Capacidade / Modelo": "9.000BTUS", "Patrimônio": "-", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado (SEM PATRIMÔNIO)"}, {"Item": "361", "Setor / Local": "UTI ADULTO 01", "Descrição do Equipamento": "UNID. EVAP. + CONDENSADORA", "Fabricante": "MIDEA", "Capacidade / Modelo": "12.000BTUS", "Patrimônio": "-", "Status Atual": "EM FUNCIONAMENTO", "Observações": "Verificado"}, {"Item": "362", "Setor / Local": "UTI NEO II", "Descrição do Equipamento": "SPLITÃO FIXO (DUTADO)", "Fabricante": "TROX", "Capacidade / Modelo": "4TR'S", "Patrimônio": "-", "Status Atual": "EM FUNCIONAMENTO", "Observações": "NECESSITA TROCA (não funciona)"}, {"Item": "363", "Setor / Local": "UTI NEO II", "Descrição do Equipamento": "SPLITÃO FIXO (DUTADO)", "Fabricante": "TROX", "Capacidade / Modelo": "4TR'S", "Patrimônio": "-", "Status Atual": "EM FUNCIONAMENTO", "Observações": "NECESSITA TROCA"}, {"Item": "364", "Setor / Local": "UTI NEO II", "Descrição do Equipamento": "SPLITÃO FIXO (DUTADO)", "Fabricante": "TROX", "Capacidade / Modelo": "4TR'S", "Patrimônio": "-", "Status Atual": "EM FUNCIONAMENTO", "Observações": "NECESSITA TROCA"}, {"Item": "365", "Setor / Local": "UTI PEDIATRICA", "Descrição do Equipamento": "SPLITÃO FIXO (DUTADO)", "Fabricante": "TROX", "Capacidade / Modelo": "4TR'S", "Patrimônio": "-", "Status Atual": "EM FUNCIONAMENTO", "Observações": "NECESSITA TROCA"}, {"Item": "366", "Setor / Local": "UTI PEDIATRICA", "Descrição do Equipamento": "SPLITÃO FIXO (DUTADO)", "Fabricante": "TROX", "Capacidade / Modelo": "4TR'S", "Patrimônio": "-", "Status Atual": "EM FUNCIONAMENTO", "Observações": "NECESSITA TROCA"}, {"Item": "367", "Setor / Local": "UTI PEDIATRICA", "Descrição do Equipamento": "SPLITÃO FIXO (DUTADO)", "Fabricante": "TROX", "Capacidade / Modelo": "4TR'S", "Patrimônio": "-", "Status Atual": "EM FUNCIONAMENTO", "Observações": "NECESSITA TROCA"}];
+
+const sectorSelect = document.getElementById('sector');
+const statusSelect = document.getElementById('statusFilter');
+const searchInput = document.getElementById('search');
+const tableBody = document.getElementById('tableBody');
+const emptyState = document.getElementById('emptyState');
+const resultCount = document.getElementById('resultCount');
+const tableTitle = document.getElementById('tableTitle');
+
+const normalize = (value) =>
+    String(value ?? '')
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLowerCase()
+        .trim();
+
+function escapeHtml(value) {
+    return String(value ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+}
+
+function uniqueSorted(field) {
+    return [...new Set(equipamentos.map(x => x[field]).filter(Boolean))]
+        .sort((a, b) => a.localeCompare(b, 'pt-BR'));
+}
+
+uniqueSorted('Setor / Local').forEach(setor => {
+    const opt = document.createElement('option');
+    opt.value = setor;
+    opt.textContent = setor;
+    sectorSelect.appendChild(opt);
+});
+
+uniqueSorted('Status Atual').forEach(status => {
+    const opt = document.createElement('option');
+    opt.value = status;
+    opt.textContent = status;
+    statusSelect.appendChild(opt);
+});
+
+function statusClass(status) {
+    const s = normalize(status);
+    if (s.includes('funcionamento')) return 'status-ok';
+    if (s.includes('manutencao')) return 'status-maint';
+    if (s.includes('obsoleto')) return 'status-old';
+    return '';
+}
+
+function isNoAsset(value) {
+    const p = String(value ?? '').trim();
+    return p === '' || p === '-';
+}
+
+function filteredData() {
+    const selectedSector = sectorSelect.value;
+    const selectedStatus = statusSelect.value;
+    const q = normalize(searchInput.value);
+
+    return equipamentos.filter(item => {
+        if (selectedSector && item['Setor / Local'] !== selectedSector) return false;
+        if (selectedStatus && item['Status Atual'] !== selectedStatus) return false;
+
+        if (q) {
+            const haystack = normalize([
+                item['Item'],
+                item['Setor / Local'],
+                item['Descrição do Equipamento'],
+                item['Fabricante'],
+                item['Capacidade / Modelo'],
+                item['Patrimônio'],
+                item['Status Atual'],
+                item['Observações']
+            ].join(' '));
+            if (!haystack.includes(q)) return false;
         }
+        return true;
+    });
+}
 
-        // Faz o botão fugir tanto ao passar o mouse (computador) quanto ao tocar (celular)
-        naoBtn.addEventListener('mouseover', desviar);
-        naoBtn.addEventListener('click', desviar);
+function render() {
+    const data = filteredData();
 
-        // Sistema para gerar corações aleatórios no fundo
-        function criarCoracao() {
-            const heart = document.createElement('div');
-            heart.classList.add('heart');
-            
-            // Alterna o estilo do emoji de coração para dar variedade
-            const modelos = ['❤️', '💖', '💘', '💕', '🌹'];
-            heart.innerHTML = modelos[Math.floor(Math.random() * modelos.length)];
-            
-            // Posição horizontal aleatória
-            heart.style.left = Math.random() * 100 + 'vw';
-            
-            // Tamanho aleatório
-            const tamanho = Math.random() * 20 + 10; // entre 10px e 30px
-            heart.style.fontSize = tamanho + 'px';
-            
-            // Velocidade da animação aleatória para parecer natural
-            const duracao = Math.random() * 3 + 4; // entre 4s e 7s
-            heart.style.animationDuration = duracao + 's';
-            
-            document.body.appendChild(heart);
+    document.getElementById('total').textContent = data.length;
+    document.getElementById('working').textContent =
+        data.filter(x => normalize(x['Status Atual']).includes('funcionamento')).length;
+    document.getElementById('maintenance').textContent =
+        data.filter(x => normalize(x['Status Atual']).includes('manutencao')).length;
+    document.getElementById('obsolete').textContent =
+        data.filter(x => normalize(x['Status Atual']).includes('obsoleto')).length;
+    document.getElementById('noAsset').textContent =
+        data.filter(x => isNoAsset(x['Patrimônio'])).length;
 
-            // Remove o coração após a animação acabar para não travar a página
-            setTimeout(() => {
-                heart.remove();
-            }, duracao * 1000);
-        }
+    tableTitle.textContent = sectorSelect.value
+        ? `Equipamentos — ${sectorSelect.value}`
+        : 'Equipamentos cadastrados';
 
-        // Cria um novo coração a cada 350 milissegundos
-        setInterval(criarCoracao, 350);
-    </script>
+    resultCount.textContent = `${data.length} resultado${data.length === 1 ? '' : 's'}`;
+
+    if (!data.length) {
+        tableBody.innerHTML = '';
+        emptyState.hidden = false;
+        return;
+    }
+
+    emptyState.hidden = true;
+    tableBody.innerHTML = data.map(item => {
+        const patrimonio = isNoAsset(item['Patrimônio'])
+            ? '<span class="patrimonio-ausente">SEM PATRIMÔNIO</span>'
+            : escapeHtml(item['Patrimônio']);
+
+        return `
+            <tr>
+                <td>${escapeHtml(item['Item'])}</td>
+                <td><strong>${escapeHtml(item['Setor / Local'])}</strong></td>
+                <td>${escapeHtml(item['Descrição do Equipamento'])}</td>
+                <td>${escapeHtml(item['Fabricante'])}</td>
+                <td>${escapeHtml(item['Capacidade / Modelo'])}</td>
+                <td>${patrimonio}</td>
+                <td><span class="status ${statusClass(item['Status Atual'])}">${escapeHtml(item['Status Atual'])}</span></td>
+                <td>${escapeHtml(item['Observações'])}</td>
+            </tr>`;
+    }).join('');
+}
+
+sectorSelect.addEventListener('change', render);
+statusSelect.addEventListener('change', render);
+searchInput.addEventListener('input', render);
+
+document.getElementById('clearBtn').addEventListener('click', () => {
+    sectorSelect.value = '';
+    statusSelect.value = '';
+    searchInput.value = '';
+    render();
+});
+
+render();
+</script>
 </body>
 </html>
